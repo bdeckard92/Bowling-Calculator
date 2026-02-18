@@ -29,6 +29,9 @@ const bowlingScoreCalculator = (frameArray) => {
     
   } 
   console.log(currentScore);
+  return currentScore;
 }
 
 bowlingScoreCalculator([1,2,3, 4])
+
+module.exports = {bowlingScoreCalculator};
