@@ -80,6 +80,9 @@ npm test -- --runInBand
 
 - Refactor conditional scoring flow into a `switch`/dispatch-style structure to reduce branching complexity.
 - At minimum, abstract repeated index access (for example `frameArray[i + 1]`, `frameArray[i + 2]`) into named variables/helpers to reduce code surface area.
+- Add input validation and structured error handling for invalid tokens, out-of-range roll values, and invalid frame sequences.
+- Add functionality to score a complete 10-frame game by explicitly counting frames.
+- Implement full 10th-frame rules, including bonus roll handling after a strike or spare in frame 10.
 - The current implementation intentionally keeps explicit index-based logic to make the scoring rules easy to trace during this phase.
 
 
