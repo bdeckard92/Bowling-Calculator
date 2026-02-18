@@ -14,26 +14,30 @@
 
 const bowlingScoreCalculator = (frameArray) => {
   let len = frameArray.length;
-  let increment = 0;  
+  let increment = 0;
   let currentScore = [];
   let strike = 10;
   for (let i = 0; i < len; i += increment) {
-    if (
+    if (frameArray[i] === "X" && frameArray[i + 1] === undefined) {
+      currentScore.push("nil");
+      increment = 1;
+    } else if (
+      frameArray[i] === "X" &&
+      typeof frameArray[i + 1] === "number" &&
+      typeof frameArray[i + 2] !== "number"
+    ) {
+      currentScore.push("nil", "nil");
+
+      increment = 1;
+    } else if (
       frameArray[i] === "X" &&
       typeof frameArray[i + 1] === "number" &&
       typeof frameArray[i + 2] === "number"
     ) {
       currentScore.push(strike + frameArray[i + 1] + frameArray[i + 2]);
-      increment += 1;
-    } else if (frameArray[i] === "X" && frameArray[i + 1] === undefined) {
-      currentScore.push("nil");
-      increment = 1;
-    } else if (frameArray[i] === "X" && typeof frameArray[i + 1] === 'number' &&  typeof frameArray[i + 2] !== 'number') {
-      currentScore.push("nil", "nil");
-     
-      increment += 1
-    }
-    else {
+      increment =  1;
+    } else if (typeof frameArray[i] === 'number' && typeof frameArray[i +1] === 'number') {
+    
       currentScore.push(frameArray[i] + frameArray[i + 1]);
       increment = 2;
     }
@@ -42,4 +46,4 @@ const bowlingScoreCalculator = (frameArray) => {
 };
 module.exports = { bowlingScoreCalculator };
 
-console.log(bowlingScoreCalculator([1,2,'X', 1, 1]));
+console.log(bowlingScoreCalculator([1, 2, "X", 1, 1]));
