@@ -34,13 +34,29 @@ const bowlingScoreCalculator = (frameArray) => {
       typeof frameArray[i + 2] === "number"
     ) {
       currentScore.push(strike + frameArray[i + 1] + frameArray[i + 2]);
-      increment =  1;
-    } else if (frameArray[i] === 'X' && frameArray[i +1] === 'X'){
-        currentScore.push(strike + strike);
-        increment = 1;
-    }
-    else if (typeof frameArray[i] === 'number' && typeof frameArray[i +1] === 'number') {
-    
+      increment = 1;
+    } else if (
+      (frameArray[i] === "X" && frameArray[i + 1] === "X") ||
+      frameArray[i + 1] === "/"
+    ) {
+      currentScore.push(strike + strike);
+      increment = 1;
+    } else if (frameArray[i] === "/" && frameArray[i + 1] === undefined) {
+      currentScore.push("nil");
+      increment = 1;
+    } else if (frameArray[i] === "/" && typeof frameArray[i + 1] === "number") {
+      currentScore.push(strike + frameArray[i + 1]);
+      increment = 1;
+    } else if (
+      (frameArray[i] === "/" && frameArray[i + 1] === "X") ||
+      frameArray[i + 1] === "/"
+    ) {
+      currentScore.push(strike + strike);
+      increment = 1;
+    } else if (
+      typeof frameArray[i] === "number" &&
+      typeof frameArray[i + 1] === "number"
+    ) {
       currentScore.push(frameArray[i] + frameArray[i + 1]);
       increment = 2;
     }
