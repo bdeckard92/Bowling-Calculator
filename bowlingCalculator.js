@@ -10,22 +10,30 @@
 //    If a strike occurs score tally returns nil until the next frame is finished. on first roll of next frame it will also return nill since no calculation can be made until after frame is finished.
 //    If a spare occurs score tally returns nil for that frame until the first role of next frame following bowling rules.
 // Assumptions: This could take in an array indicating a portion of the game or the entire game.
-//                           
+//
 
 
 
 const bowlingScoreCalculator = (frameArray) => {
-    let len = frameArray.length
-    let increment = 1;
-    let currentScore = []
-  for (let i = 0; i < len; i +=increment){
-    if (frameArray[i] === 10 && frameArray[i + 1] === null){
-         currentScore.push("X")
+  let len = frameArray.length;
+  let increment = 1;
+  let currentScore = [];
+  let strike = 10;
+  for (let i = 0; i < len; i += increment) {
+    if (
+      frameArray[i] === "X" &&
+      typeof frameArray[i + 1] === "number" &&
+      typeof frameArray[i + 1] === "number"
+    ) {
+      currentScore.push(strike + frameArray[i + 1] + frameArray[i + 2]);
+      increment = 1;
+    } else if (frameArray[i] === "X" && !(frameArray[i + 1]) ) {
+        currentScore.push('nil')
     } else {
-        currentScore.push(frameArray[i] + frameArray[i +1])
-        increment = 2;
+      currentScore.push(frameArray[i] + frameArray[i + 1]);
+      increment = 2;
     }
-  } 
+  }
   return currentScore;
-}
-module.exports = {bowlingScoreCalculator};
+};
+module.exports = { bowlingScoreCalculator };
