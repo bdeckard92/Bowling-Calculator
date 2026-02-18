@@ -9,6 +9,7 @@ describe("Bowling score calculator acceptance criteria", () => {
     expect(bowlingScoreCalculator(["X"])).toEqual(["nil"]);
     expect(bowlingScoreCalculator([3, 4, "X", 3])).toEqual([7, "nil", "nil"]);
     expect(bowlingScoreCalculator([3, 4, "X", 3, 5])).toEqual([7, 18, 8]);
+    expect(bowlingScoreCalculator([3, 4, "X", "X"])).toEqual([7, 20, "nil"]);
   });
 
   test("returns nil for spare frame until the first roll of next frame exists", () => {
