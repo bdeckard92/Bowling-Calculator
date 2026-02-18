@@ -12,24 +12,28 @@
 // Assumptions: This could take in an array indicating a portion of the game or the entire game.
 //
 
-
-
 const bowlingScoreCalculator = (frameArray) => {
   let len = frameArray.length;
-  let increment = 1;
+  let increment = 0;  
   let currentScore = [];
   let strike = 10;
   for (let i = 0; i < len; i += increment) {
     if (
       frameArray[i] === "X" &&
       typeof frameArray[i + 1] === "number" &&
-      typeof frameArray[i + 1] === "number"
+      typeof frameArray[i + 2] === "number"
     ) {
       currentScore.push(strike + frameArray[i + 1] + frameArray[i + 2]);
+      increment += 1;
+    } else if (frameArray[i] === "X" && frameArray[i + 1] === undefined) {
+      currentScore.push("nil");
       increment = 1;
-    } else if (frameArray[i] === "X" && !(frameArray[i + 1]) ) {
-        currentScore.push('nil')
-    } else {
+    } else if (frameArray[i] === "X" && typeof frameArray[i + 1] === 'number' &&  typeof frameArray[i + 2] !== 'number') {
+      currentScore.push("nil", "nil");
+     
+      increment += 1
+    }
+    else {
       currentScore.push(frameArray[i] + frameArray[i + 1]);
       increment = 2;
     }
@@ -37,3 +41,5 @@ const bowlingScoreCalculator = (frameArray) => {
   return currentScore;
 };
 module.exports = { bowlingScoreCalculator };
+
+console.log(bowlingScoreCalculator([1,2,'X', 1, 1]));
