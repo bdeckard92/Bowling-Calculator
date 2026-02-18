@@ -14,7 +14,6 @@
 
 
 
-// helper functions: 
 const bowlingScoreCalculator = (frameArray) => {
     let len = frameArray.length
     let increment = 1;
@@ -26,12 +25,7 @@ const bowlingScoreCalculator = (frameArray) => {
         currentScore.push(frameArray[i] + frameArray[i +1])
         increment = 2;
     }
-    
   } 
-  console.log(currentScore);
   return currentScore;
 }
-
-bowlingScoreCalculator([1,2,3, 4])
-
 module.exports = {bowlingScoreCalculator};
