@@ -6,20 +6,21 @@ describe('Bowling score calculator acceptance criteria', () => {
   });
 
   test('displays X when a strike occurs in a frame', () => {
-    expect(bowlingScoreCalculator([10, null])).toEqual(['X']);
+    expect(bowlingScoreCalculator([10, null])).toEqual(['nil']);
   });
 
   test('displays spare character for remainder pins on second roll', () => {
-    expect(bowlingScoreCalculator([7, "/"])).toEqual(['/']);
+    expect(bowlingScoreCalculator([7, "/"])).toEqual(['nil']);
   });
 
   test('returns nil for strike frame until the next frame is completed', () => {
-    expect(bowlingScoreCalculator([10, null, 3, null])).toEqual([null, null]);
-    expect(bowlingScoreCalculator([10, null, 3, 4])).toEqual([null, 7]);
+    expect(bowlingScoreCalculator([3, 4, 'X', 3])).toEqual([7, 'nil', 'nil']);
+    expect(bowlingScoreCalculator([3, 4, 'X', 3, 5])).toEqual([7, 18, 8]);
   });
 
   test('returns nil for spare frame until the first roll of next frame exists', () => {
-    expect(bowlingScoreCalculator([7, '/', null, null])).toEqual([null, null]);
-    expect(bowlingScoreCalculator([7, '/', 5, null])).toEqual([15, null]);
+    expect(bowlingScoreCalculator([7, 1, '/'])).toEqual([8, 'nil']);
+    expect(bowlingScoreCalculator([7, 1,  '/', 5 ])).toEqual([8, 15, 'nil']);
+     expect(bowlingScoreCalculator([7, 1,  '/', 5, 1 ])).toEqual([8, 15, 6]);
   });
 });
