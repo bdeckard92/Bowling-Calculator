@@ -1,4 +1,4 @@
-const { bowlingScoreCalculator } = require("./bowlingCalculator");
+const { bowlingScoreCalculator } = require("./refinedCalculator.js");
 
 describe("Bowling score calculator acceptance criteria", () => {
   test("calculates running score for open frames from a partial (live) game", () => {
@@ -8,7 +8,7 @@ describe("Bowling score calculator acceptance criteria", () => {
   test("returns nil for strike frame until the next frame is completed", () => {
     expect(bowlingScoreCalculator(["X"])).toEqual(["nil"]);
     expect(bowlingScoreCalculator([3, 4, "X", 3])).toEqual([7, "nil", "nil"]);
-    expect(bowlingScoreCalculator([3, 4, "X", 3, 5])).toEqual([7, 18, 8]);
+    expect(bowlingScoreCalculator([3, 4, "X", 3, "/"])).toEqual([7, 20, 'nil']);
     expect(bowlingScoreCalculator([3, 4, "X", "X"])).toEqual([7, 20, "nil"]);
   });
 
@@ -21,6 +21,6 @@ describe("Bowling score calculator acceptance criteria", () => {
 
   test("returns proper calculation for consecutive strikes or spares", () => {
     expect(bowlingScoreCalculator([7, 1, "/", "X"])).toEqual([8, 20, "nil"]);
-    expect(bowlingScoreCalculator([7, 1, "X", "/", 2])).toEqual([8, 20, 12]);
+    expect(bowlingScoreCalculator([7, 1, "X", 2, "/", 2])).toEqual([8, 20, 12]);
   });
 });

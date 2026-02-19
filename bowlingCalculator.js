@@ -65,4 +65,4 @@ const bowlingScoreCalculator = (frameArray) => {
 };
 module.exports = { bowlingScoreCalculator };
 
-
+console.log(bowlingScoreCalculator([1,2,'X', 'X', 1, 2]))

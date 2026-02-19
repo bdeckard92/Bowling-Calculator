@@ -1,88 +1,69 @@
 # Bowling Calculator
 
-A small Node.js function that calculates **running frame scores** for a live bowling game.
+A small Node.js scoring function that calculates running frame scores for a live bowling game.
 
-## Purpose
+## Why there are two versions
 
-`bowlingScoreCalculator(frameArray)` is designed to accept a partial or complete game state and return the current score per frame according to the project acceptance criteria.
+The original implementation in bowlingCalculator.js assumed a spare could appear as a standalone marker, like "/".
 
-It supports:
-- Open frames (two numeric rolls)
-- Strikes (`"X"`)
-- Spares (`"/"`)
-- Incomplete live-game frames by returning `"nil"` when a score cannot be resolved yet
+During refinement, the key realization was that a spare is normally represented as a two-roll frame, for example [3, "/"]. That misunderstanding was the main source of edge-case behavior around frame parsing and bonus lookahead.
 
-## What the Function Does
+The refined implementation in refinedCalculator.js was introduced to fix that frame-shape assumption and make the scoring logic easier to reason about.
 
-The function takes an array of frame/roll markers and returns an array of frame scores.
+## What changed in the refined version
 
-### Input conventions
-- Open frame: two numbers, e.g. `[3, 4]`
-- Strike frame: `"X"` (single index)
-- Spare frame: `"/"` (single index, scored with next roll bonus)
+- Added explicit spare-pair handling for number + "/" frame patterns.
+- Split complex branching into smaller helper functions for strike, spare, and open-frame scoring.
+- Preserved live-game behavior where unresolved frames return "nil".
+- Kept compatibility with strike markers ("X") and partial/in-progress game states.
 
-### Output conventions
-- Open frame score is immediate (sum of two rolls)
-- Strike score is `10 + next two rolls` when available, otherwise `"nil"`
-- Spare score is `10 + next roll` when available, otherwise `"nil"`
-- In-progress live game may include multiple `"nil"` values in the running score
+## Test updates
 
-### Example
+The test cases were updated to reflect proper frame understanding, specifically that a spare is interpreted as a two-roll frame (for example [3, "/"]) rather than only a standalone marker.
 
-```js
-const { bowlingScoreCalculator } = require("./bowlingCalculator");
+This ensures assertions align with bowling frame structure and validates the refined scoring behavior against the corrected frame model.
 
-console.log(bowlingScoreCalculator([1, 2, 3, 4]));
-// [3, 7]
+## Input conventions
 
-console.log(bowlingScoreCalculator([3, 4, "X", 3]));
-// [7, "nil", "nil"]
+- Open frame: [3, 4]
+- Strike frame: "X"
+- Spare frame (refined model): [3, "/"]
+- Legacy standalone spare markers may still appear in partial streams, but the refined logic is centered on spare as a two-roll frame.
 
-console.log(bowlingScoreCalculator([7, 1, "/", 5]));
-// [8, 15]
-```
+## Output conventions
 
-## Install Dependencies
+- Open frame score is immediate (sum of two rolls).
+- Strike score is 10 + next two rolls when available, otherwise "nil".
+- Spare score is 10 + next roll when available, otherwise "nil".
+- In-progress live games can return one or more "nil" values while bonuses are unresolved.
+
+## Project files
+
+- bowlingCalculator.js: original implementation
+- refinedCalculator.js: refined implementation with spare-pair frame handling
+- bowlingCalculator.test.js: Jest acceptance tests (currently targeting refinedCalculator.js)
+
+## Install dependencies
 
 From the project root:
 
-```bash
 npm install
-```
 
-This installs Jest from `devDependencies`.
+## Run tests for the refined file
 
-## Run Tests
+Current tests import refinedCalculator.js from bowlingCalculator.test.js, so either command validates the refined implementation:
 
-```bash
-npm test
-```
+- npm test
+- npx jest bowlingCalculator.test.js
 
-To run tests in-band:
+Optional (run in-band):
 
-```bash
-npm test -- --runInBand
-```
+- npm test -- --runInBand
 
-## Project Files
+## Current scope / limitations
 
-- `bowlingCalculator.js` – scoring function implementation
-- `bowlingCalculator.test.js` – Jest acceptance-style test coverage
-
-## Known Limitations / Assumptions
-
-- The function is designed around the current acceptance tests and live-score behavior, not a full official 10-frame engine.
-- Frames are interpreted from a flat array where open frames are two numbers and strike/spare frames are single markers (`"X"`, `"/"`).
-- Unresolved bonus scenarios return the string `"nil"` (not JavaScript `null`).
-- The current test suite validates partial-game scoring paths; final-frame bonus roll edge cases are not comprehensively covered.
-
-## Next Steps
-
-- Refactor conditional scoring flow into a `switch`/dispatch-style structure to reduce branching complexity.
-- At minimum, abstract repeated index access (for example `frameArray[i + 1]`, `frameArray[i + 2]`) into named variables/helpers to reduce code surface area.
-- Add input validation and structured error handling for invalid tokens, out-of-range roll values, and invalid frame sequences.
-- Add functionality to score a complete 10-frame game by explicitly counting frames.
-- Implement full 10th-frame rules, including bonus roll handling after a strike or spare in frame 10.
-- The current implementation intentionally keeps explicit index-based logic to make the scoring rules easy to trace during this phase.
+- The project is focused on running-score behavior for partial live games.
+- Unresolved scoring states return the string "nil".
+- Full 10th-frame and complete official 10-frame validation rules are not fully modeled yet.
 
 
