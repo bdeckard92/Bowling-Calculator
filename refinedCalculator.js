@@ -24,8 +24,8 @@ const scoreStrikeFrame = (nextRoll, lookaheadRoll) => {
   if (isNumber(nextRoll) && isSpare(lookaheadRoll)) {
     return [STRIKE_VALUE + STRIKE_VALUE];
   }
-  // again here same return as if spare if strike follows strike
-  if (isStrike(nextRoll) || isSpare(nextRoll)) {
+  // If strike follows strike return strike value plus itself
+  if (isStrike(nextRoll)) {
     return [STRIKE_VALUE + STRIKE_VALUE];
   }
 
@@ -49,8 +49,11 @@ const scoreSpareFrame = (nextRoll) => {
   return [];
 };
 
+// This provides logic to interpret if 2 numbers are in a frame to create proper score
 const scoreOpenFrame = (firstRoll, secondRoll) => {
+  // Check that both rolls in one frame are numbers
   if (isNumber(firstRoll) && isNumber(secondRoll)) {
+    // if true return  object of scores that sums each role in an array scores, and provides increment count in step to move forware 2 indecies in array (to get to next frame)
     return { scores: [firstRoll + secondRoll], step: 2 };
   }
 
@@ -91,5 +94,4 @@ const bowlingScoreCalculator = (frameArray) => {
   return runningScores;
 };
 
-module.exports = {bowlingScoreCalculator};
-
+module.exports = { bowlingScoreCalculator };
